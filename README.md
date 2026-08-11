@@ -19,8 +19,6 @@ Librería en **Vanilla JavaScript** (ES6+) ultraligera (<2KB) y sin dependencias
 - Eventos
 - Casos de Uso
 - Compatibilidad
-- Estructura del Proyecto
-- Contribución
 - Licencia
 
 ---
