@@ -172,26 +172,6 @@ PgNumber.js utiliza JavaScript nativo (ES6) y no requiere ningún transpilador p
 
 ---
 
-## 📁 Estructura del Proyecto
-
-pgnumber/
-├── pgnumber.js        # Código fuente original (Unminified)
-├── pgnumber.min.js    # Versión de producción ultraligera (<2KB)
-├── README.md          # Documentación del proyecto
-└── LICENSE            # Licencia MIT
-
----
-
-## 🤝 Contribución
-
-1. Haz un Fork del repositorio.
-2. Crea una rama para tu feature (git checkout -b feature/nueva-caracteristica).
-3. Realiza tus cambios y haz Commit (git commit -m 'Añade nueva característica').
-4. Haz Push a la rama (git push origin feature/nueva-caracteristica).
-5. Abre un Pull Request.
-
----
-
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Creado por **Wilfredo Nina Choquetarqui**.
