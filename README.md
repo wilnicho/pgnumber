@@ -5,7 +5,7 @@
 ![bundle size](https://img.shields.io/badge/size-%3C%202KB-brightgreen.svg)
 ![js](https://img.shields.io/badge/vanilla-JS-yellow.svg)
 
-Librería en **Vanilla JavaScript** (ES6+) ultraligera (<2KB) y sin dependencias para formatear, restringir y validar entradas numéricas en tiempo real sobre elementos <input>.
+Librería en **Vanilla JavaScript** (ES6+) ultraligera (<2KB) y sin dependencias para formatear, restringir y validar entradas numéricas en tiempo real sobre elementos ```<input>```.
 
 ---
 
@@ -31,7 +31,7 @@ Librería en **Vanilla JavaScript** (ES6+) ultraligera (<2KB) y sin dependencias
 - 🚀 **Zero Dependencies**: No requiere jQuery, Bootstrap JS ni frameworks adicionales.
 - 🔄 **Delegación de Eventos Nativa**: Ideal para formularios dinámicos y tablas donde los inputs se agregan o eliminan en tiempo de ejecución.
 - 🏷️ **Soporte HTML Data Attributes**: Configura el comportamiento directamente desde el HTML con atributos data-pgnumber-*.
-- 🌐 **Soporte UMD**: Compatible con etiquetas <script> directas, CommonJS y módulos ES6.
+- 🌐 **Soporte UMD**: Compatible con etiquetas ```<script>``` directas, CommonJS y módulos ES6.
 - ♿ **Accesibilidad Integrada**: Mantiene el atributo type="text" o type="number" respetando la experiencia del usuario.
 
 ---
@@ -42,13 +42,13 @@ Librería en **Vanilla JavaScript** (ES6+) ultraligera (<2KB) y sin dependencias
 
 Descarga el archivo pgnumber.js o pgnumber.min.js e inclúyelo en tu archivo HTML:
 
-<script src="path/to/pgnumber.js"></script>
+```<script src="path/to/pgnumber.js"></script>```
 
 ### Importación Modular (ES6 / Bundlers)
 
 Si utilizas un entorno de módulos o bundlers (Vite, Webpack, Rollup):
 
-import PgNumber from './pgnumber.js';
+```import PgNumber from './pgnumber.js';```
 
 ---
 
@@ -57,7 +57,7 @@ import PgNumber from './pgnumber.js';
 ### 1. Ejemplo Básico
 
 Inicializa la librería pasando un selector CSS o una referencia HTML:
-
+```
 <input type="text" id="monto" placeholder="0.00" />
 
 <script>
@@ -67,11 +67,11 @@ Inicializa la librería pasando un selector CSS o una referencia HTML:
     negative: false
   });
 </script>
-
+```
 ### 2. Uso con Delegación (Campos Dinámicos)
 
 Escucha sobre un contenedor padre para dar soporte automático a filas o elementos agregados dinámicamente al DOM sin necesidad de re-inicializar la instancia:
-
+```
 <table id="tablaVentas">
   <tbody>
     <tr>
@@ -88,11 +88,11 @@ Escucha sobre un contenedor padre para dar soporte automático a filas o element
     separator: '.'
   });
 </script>
-
+```
 ### 3. Configuración vía Atributos HTML data-*
 
 Sobrescribe las opciones globales directamente desde la etiqueta HTML de cada input:
-
+```
 <input 
   type="text" 
   class="monto-custom" 
@@ -105,7 +105,7 @@ Sobrescribe las opciones globales directamente desde la etiqueta HTML de cada in
   // Detecta y respeta automáticamente los atributos data-pgnumber-*
   new PgNumber('.monto-custom');
 </script>
-
+```
 ---
 
 ## ⚙️ Opciones de Configuración
@@ -133,24 +133,24 @@ Crea e inicializa una nueva instancia.
 ### instance.destroy()
 
 Elimina todos los event listeners asociados y libera recursos en memoria:
-
+```
 const pg = new PgNumber('#monto');
 
 // Al destruir la vista o el componente:
 pg.destroy();
-
+```
 ---
 
 ## 🔔 Eventos
 
-PgNumber.js emite eventos nativos sobre el elemento <input> para integrar fácilmente con otras librerías o lógica de negocio:
-
+PgNumber.js emite eventos nativos sobre el elemento ```<input>``` para integrar fácilmente con otras librerías o lógica de negocio:
+```
 const input = document.querySelector('#monto');
 
 input.addEventListener('change', (e) => {
   console.log('Valor formateado final:', e.target.value);
 });
-
+```
 ---
 
 ## 🎯 Casos de Uso
