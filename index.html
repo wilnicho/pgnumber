@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PgNumber.js | Librería JavaScript para Formatear y Validar Números</title>
+  <meta name="description" content="Librería Vanilla JS ligera (<2KB) y sin dependencias para formatear, restringir y validar entradas numéricas en tiempo real.">
+  <meta name="keywords" content="JavaScript, PgNumber.js, format numbers, input mask, vanilla js, number validator">
+  <meta name="author" content="Wilfredo Nina Choquetarqui">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://github.com/wilnicho/pgnumber">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PgNumber.js | Librería JavaScript para Formatear Números">
+  <meta property="og:description" content="Librería Vanilla JS ultraligera (<2KB) sin dependencias para validar y formatear inputs numéricos.">
+  <meta property="og:url" content="https://github.com/wilnicho/pgnumber">
+  <meta property="og:image" content="https://github.com/wilnicho/pgnumberassets/og-image.png">
+
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <style>
+    :root {
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      --mesh-color-1: rgba(13, 110, 253, 0.15);
+      --mesh-color-2: rgba(111, 66, 193, 0.12);
+      --mesh-color-3: rgba(32, 201, 151, 0.1);
+    }
+
+    body {
+      font-family: var(--font-main);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    code, pre, .font-monospace {
+      font-family: var(--font-code) !important;
+    }
+
+    .code-block-wrapper {
+      position: relative;
+    }
+
+    /* Botón de copiar como ícono puro sin aspecto de botón pesado */
+    .btn-copy-code {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 10;
+      background: transparent;
+      border: none;
+      color: #a6adc8;
+      padding: 0.35rem;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btn-copy-code:hover {
+      opacity: 1;
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    pre[class*="language-"] {
+      border-radius: 8px;
+      margin: 0;
+      border: 1px solid var(--bs-border-color);
+      background: #1e1e2e !important;
+    }
+
+    /* Ajuste para Sticky Navbar en la etiqueta header superior */
+    header.sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+    }
+
+    .top-navbar {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: rgba(var(--bs-body-bg-rgb), 0.85);
+      border-bottom: 1px solid var(--bs-border-color);
+    }
+
+    /* Uniformidad de tamaño para todos los botones del Navbar */
+    .btn-nav {
+      height: 38px;
+      padding: 0 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .hero-mesh-bg {
+      position: relative;
+      background: 
+        radial-gradient(at 0% 0%, var(--mesh-color-1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, var(--mesh-color-2) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, var(--mesh-color-3) 0px, transparent 50%);
+      border-radius: 16px;
+      border: 1px solid var(--bs-border-color);
+      overflow: hidden;
+    }
+
+    .sidebar-nav {
+      position: sticky;
+      top: 5rem;
+      height: calc(100vh - 6rem);
+      overflow-y: auto;
+    }
+
+    .nav-link-custom {
+      color: var(--bs-body-color);
+      text-decoration: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link-custom:hover, .nav-link-custom.active {
+      background-color: rgba(var(--bs-primary-rgb), 0.15);
+      color: var(--bs-primary);
+      font-weight: 600;
+    }
+
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .card-demo {
+      border: 1px solid var(--bs-border-color);
+      background-color: var(--bs-card-bg);
+      transition: border-color 0.2s ease;
+    }
+
+    .card-demo:hover {
+      border-color: var(--bs-primary);
+    }
+
+    .hero-title {
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .custom-table {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--bs-border-color);
+    }
+
+    .custom-table thead th {
+      background-color: var(--bs-tertiary-bg);
+      color: var(--bs-body-color);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1rem;
+      border-bottom: 2px solid var(--bs-border-color);
+    }
+
+    .custom-table tbody td {
+      padding: 0.85rem 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .border-end-md {
+        border-right: 1px solid var(--bs-border-color);
+      }
+    }
+  </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#docSidebar" data-bs-offset="100" tabindex="0">
+
+  <!-- Header Sticky Superior -->
+  <header class="sticky-header">
+    <nav class="navbar navbar-expand-lg top-navbar py-2" aria-label="Navegación Principal">
+      <div class="container-fluid px-lg-5">
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#" aria-label="PgNumber.js Inicio">
+          <span>PgNumber.js</span>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-8">v1.0.0</span>
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-outline-secondary btn-nav d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-label="Abrir Menú">
+            <i data-lucide="menu" aria-hidden="true"></i>
+          </button>
+
+          <a href="https://github.com/wilnicho/pgnumber" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-nav" aria-label="Repositorio de GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span class="d-none d-sm-inline">GitHub</span>
+          </a>
+
+          <button id="themeToggle" class="btn btn-outline-primary btn-nav" aria-label="Cambiar tema">
+            <i data-lucide="sun" id="themeIcon" aria-hidden="true"></i>
+            <span id="themeText" class="d-none d-sm-inline">Modo Claro</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid px-lg-5 py-4">
+    <div class="row g-4">
+      
+      <!-- Navegación Lateral -->
+      <aside class="col-lg-3 col-xl-2 collapse d-lg-block" id="sidebarCollapse" aria-label="Navegación de Documentación">
+        <nav id="docSidebar" class="sidebar-nav d-flex flex-column gap-1 pe-2">
+          <a href="#introduccion" class="nav-link-custom"><i data-lucide="book-open" class="icon-sm" aria-hidden="true"></i> Introducción</a>
+          <a href="#instalacion" class="nav-link-custom"><i data-lucide="download" class="icon-sm" aria-hidden="true"></i> Instalación</a>
+          <a href="#playground" class="nav-link-custom"><i data-lucide="sliders" class="icon-sm" aria-hidden="true"></i> Playground Dinámico</a>
+          <a href="#opciones" class="nav-link-custom"><i data-lucide="settings" class="icon-sm" aria-hidden="true"></i> Opciones de Config</a>
+          <a href="#ejemplos" class="nav-link-custom"><i data-lucide="code-2" class="icon-sm" aria-hidden="true"></i> Ejemplos Prácticos</a>
+          <a href="#api" class="nav-link-custom"><i data-lucide="cpu" class="icon-sm" aria-hidden="true"></i> API y Métodos</a>
+        </nav>
+      </aside>
+
+      <!-- Contenido Principal -->
+      <main class="col-lg-9 col-xl-10">
+
+        <!-- Banner Principal -->
+        <section id="introduccion" class="hero-mesh-bg p-4 p-md-5 mb-5" aria-labelledby="heading-intro">
+          <div class="row align-items-center">
+            <div class="col-md-9">
+              <h1 id="heading-intro" class="hero-title display-5 mb-2">PgNumber.js</h1>
+              <p class="lead text-secondary mb-3">
+                Librería en JavaScript puro (Vanilla ES6+) ultraligera sin dependencias para restringir, validar y formatear entradas numéricas en tiempo real.
+              </p>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">Sin Dependencias</span>
+                <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2">UMD Compatible</span>
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2">&lt; 2 KB Minificado</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Instalación -->
+        <section id="instalacion" class="mb-5" aria-labelledby="heading-instalacion">
+          <h2 id="heading-instalacion" class="h3 fw-bold mb-3">Instalación e Integración</h2>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <article class="card card-demo h-100 p-3">
+                <h3 class="h5 card-title fw-semibold text-primary">Inclusión Directa (HTML)</h3>
+                <p class="text-secondary small">Descarga el archivo e inclúyelo mediante etiqueta script estándar:</p>
+                <div class="code-block-wrapper">
+                  <pre><code class="language-html">&lt;script src="pgnumber.js"&gt;&lt;/script&gt;</code></pre>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-md-6">
+              <article class="card card-demo h-100 p-3">
+                <h3 class="h5 card-title fw-semibold text-primary">Importación ES6 / Bundlers</h3>
+                <p class="text-secondary small">Importación modular para entornos como Vite, Webpack o Rollup:</p>
+                <div class="code-block-wrapper">
+                  <pre><code class="language-javascript">import PgNumber from './pgnumber.js';</code></pre>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- Playground Interactivo -->
+        <section id="playground" class="mb-5" aria-labelledby="heading-playground">
+          <div class="card border-primary">
+            <div class="card-header bg-primary bg-opacity-10 border-primary d-flex align-items-center gap-2 py-3">
+              <i data-lucide="sliders" class="text-primary" aria-hidden="true"></i>
+              <h2 id="heading-playground" class="h5 mb-0 fw-bold text-primary">Playground Interactivo al Instante</h2>
+            </div>
+            <div class="card-body p-4">
+              <div class="row g-4 mb-4">
+                <div class="col-md-5 border-end-md">
+                  <h3 class="h6 fw-bold mb-3 text-uppercase fs-7 text-secondary">Configuración en Tiempo Real</h3>
+                  
+                  <div class="mb-3">
+                    <label for="playDecimals" class="form-label small fw-semibold">Posiciones Decimales (`decimals`)</label>
+                    <input type="number" id="playDecimals" class="form-control form-control-sm play-control" value="2" min="0" max="6">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="playSeparator" class="form-label small fw-semibold">Separador Decimal (`separator`)</label>
+                    <select id="playSeparator" class="form-select form-select-sm play-control">
+                      <option value="." selected>Punto (.)</option>
+                      <option value=",">Coma (,)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-check form-switch mb-2">
+                    <input class="form-check-input play-control" type="checkbox" id="playNegative">
+                    <label class="form-check-label small fw-semibold" for="playNegative">Permitir Negativos (`negative`)</label>
+                  </div>
+
+                  <div class="form-check form-switch mb-2">
+                    <input class="form-check-input play-control" type="checkbox" id="playParse" checked>
+                    <label class="form-check-label small fw-semibold" for="playParse">Auto-formatear al salir (`parse`)</label>
+                  </div>
+
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input play-control" type="checkbox" id="playSelectize" checked>
+                    <label class="form-check-label small fw-semibold" for="playSelectize">Auto-seleccionar al entrar (`selectize`)</label>
+                  </div>
+                </div>
+
+                <div class="col-md-7 d-flex flex-column justify-content-center">
+                  <div class="p-3 rounded bg-body-tertiary border text-center">
+                    <label for="playgroundInput" class="form-label fw-bold mb-2">Escribe aquí para probar al instante:</label>
+                    <input type="text" id="playgroundInput" class="form-control form-control-lg text-center font-monospace fw-bold fs-4" placeholder="0.00" autocomplete="off">
+                    <small class="text-secondary d-block mt-2">Los cambios aplican y formatean automáticamente el campo mediante blur.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vista previa de código -->
+              <div class="border-top pt-3">
+                <h3 class="h6 fw-bold mb-2 text-uppercase fs-7 text-secondary">Código Generado</h3>
+                <ul class="nav nav-tabs nav-tabs-sm border-bottom-0 mb-2" id="codePreviewTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active py-1 px-3 fs-7" id="js-tab" data-bs-toggle="tab" data-bs-target="#js-code-panel" type="button" role="tab">JavaScript</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link py-1 px-3 fs-7" id="html-tab" data-bs-toggle="tab" data-bs-target="#html-code-panel" type="button" role="tab">HTML Data Attributes</button>
+                  </li>
+                </ul>
+                <div class="tab-content" id="codePreviewTabsContent">
+                  <div class="tab-pane fade show active" id="js-code-panel" role="tabpanel">
+                    <div class="code-block-wrapper">
+                      <pre><code class="language-javascript" id="previewJsCode">new PgNumber('#miInput', { decimals: 2, separator: '.', negative: false, parse: true, selectize: true });</code></pre>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="html-code-panel" role="tabpanel">
+                    <div class="code-block-wrapper">
+                      <pre><code class="language-html" id="previewHtmlCode">&lt;input type="text" data-pgnumber-decimals="2" data-pgnumber-separator="." data-pgnumber-negative="false" data-pgnumber-parse="true" data-pgnumber-selectize="true" /&gt;</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Opciones de Configuración -->
+        <section id="opciones" class="mb-5" aria-labelledby="heading-opciones">
+          <h2 id="heading-opciones" class="h3 fw-bold mb-3">Opciones de Configuración</h2>
+          <p class="text-secondary">Las opciones pueden configurarse globalmente mediante la API JS o individualmente sobre cada elemento HTML con atributos `data-pgnumber-*`.</p>
+
+          <div class="table-responsive custom-table">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Propiedad JS</th>
+                  <th scope="col">Atributo HTML Data</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Por Defecto</th>
+                  <th scope="col">Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>selector</code></td>
+                  <td>-</td>
+                  <td><span class="badge bg-secondary">string</span></td>
+                  <td><code>""</code></td>
+                  <td>Selector CSS para activar la delegación de eventos en elementos dinámicos.</td>
+                </tr>
+                <tr>
+                  <td><code>negative</code></td>
+                  <td><code>data-pgnumber-negative</code></td>
+                  <td><span class="badge bg-secondary">boolean</span></td>
+                  <td><code>false</code></td>
+                  <td>Permite o prohíbe el ingreso del signo negativo (`-`).</td>
+                </tr>
+                <tr>
+                  <td><code>decimals</code></td>
+                  <td><code>data-pgnumber-decimals</code></td>
+                  <td><span class="badge bg-secondary">number</span></td>
+                  <td><code>2</code></td>
+                  <td>Número máximo de lugares decimales permitidos.</td>
+                </tr>
+                <tr>
+                  <td><code>separator</code></td>
+                  <td><code>data-pgnumber-separator</code></td>
+                  <td><span class="badge bg-secondary">string</span></td>
+                  <td><code>"."</code></td>
+                  <td>Carácter utilizado como separador decimal (`"."` o `","`).</td>
+                </tr>
+                <tr>
+                  <td><code>parse</code></td>
+                  <td><code>data-pgnumber-parse</code></td>
+                  <td><span class="badge bg-secondary">boolean</span></td>
+                  <td><code>true</code></td>
+                  <td>Aplica normalización `toFixed()` en el evento `blur`.</td>
+                </tr>
+                <tr>
+                  <td><code>selectize</code></td>
+                  <td><code>data-pgnumber-selectize</code></td>
+                  <td><span class="badge bg-secondary">boolean</span></td>
+                  <td><code>true</code></td>
+                  <td>Selecciona todo el texto del campo automáticamente en el evento `focus`.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Ejemplos Prácticos -->
+        <section id="ejemplos" class="mb-5" aria-labelledby="heading-ejemplos">
+          <h2 id="heading-ejemplos" class="h3 fw-bold mb-4">Ejemplos Prácticos</h2>
+
+          <article class="card card-demo mb-4">
+            <div class="card-body">
+              <h3 class="h5 fw-bold text-primary mb-2">1. Configuración por Atributos HTML Data</h3>
+              <p class="text-secondary small mb-3">Sobrescribe la configuración global de JavaScript utilizando atributos HTML en cada elemento.</p>
+              
+              <div class="row g-3 align-items-center mb-3">
+                <div class="col-md-6">
+                  <label for="demoAttrInput" class="visually-hidden">Ejemplo Data Attributes</label>
+                  <input type="text" id="demoAttrInput" class="form-control demo-data-attr" data-pgnumber-negative="true" data-pgnumber-decimals="4" data-pgnumber-separator="," placeholder="Ej: -123,4567">
+                </div>
+                <div class="col-md-6">
+                  <small class="text-muted">Acepta negativos, 4 decimales y usa coma (,) como separador.</small>
+                </div>
+              </div>
+
+              <div class="code-block-wrapper">
+                <pre><code class="language-html">&lt;input type="text" class="demo-input" data-pgnumber-negative="true" data-pgnumber-decimals="4" data-pgnumber-separator="," /&gt;
+&lt;script&gt;
+  new PgNumber('.demo-input');
+&lt;/script&gt;</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card-demo mb-4">
+            <div class="card-body">
+              <h3 class="h5 fw-bold text-primary mb-2">2. Delegación en Formularios / Tablas Dinámicas</h3>
+              <p class="text-secondary small mb-3">Permite escuchar campos creados en tiempo de ejecución sin re-inicializar el plugin.</p>
+              
+              <div id="containerDinamico" class="mb-3 p-3 border rounded bg-body-tertiary">
+                <div class="input-group mb-2">
+                  <input type="text" class="form-control input-dinamico" aria-label="Precio item 1" placeholder="Precio item 1">
+                  <button class="btn btn-outline-danger btn-remove" type="button" onclick="this.parentElement.remove()">Eliminar</button>
+                </div>
+              </div>
+
+              <button id="btnAgregarCampo" class="btn btn-sm btn-outline-primary mb-3">
+                <i data-lucide="plus" class="icon-sm" aria-hidden="true"></i> Agregar Nuevo Campo Dinámico
+              </button>
+
+              <div class="code-block-wrapper">
+                <pre><code class="language-javascript">// Escucha sobre el contenedor padre (#containerDinamico)
+new PgNumber('#containerDinamico', {
+  selector: '.input-dinamico',
+  decimals: 2,
+  separator: '.'
+});</code></pre>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <!-- API y Métodos -->
+        <section id="api" class="mb-5" aria-labelledby="heading-api">
+          <h2 id="heading-api" class="h3 fw-bold mb-3">API y Métodos</h2>
+          
+          <article class="card card-demo p-3 mb-3">
+            <h3 class="h5 fw-bold font-monospace text-primary">new PgNumber(target, [options])</h3>
+            <p class="text-secondary mb-2">Crea e inicializa una nueva instancia de la librería sobre los elementos especificados.</p>
+            <ul class="small mb-0 text-secondary">
+              <li><code>target</code>: Puede ser un string (selector CSS), un <code>HTMLElement</code>, un <code>NodeList</code> o un Array de elementos.</li>
+              <li><code>options</code>: Objeto de configuración opcional.</li>
+            </ul>
+          </article>
+
+          <article class="card card-demo p-3">
+            <h3 class="h5 fw-bold font-monospace text-primary">instance.destroy()</h3>
+            <p class="text-secondary mb-0">Elimina los listeners de eventos registrados sobre los contenedores y libera referencias en memoria. Indispensable al desmontar componentes en aplicaciones SPA (React, Vue, Angular).</p>
+          </article>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+  <script src="pgnumber.js" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inicializar iconos
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // 1. Cambio de Tema
+      const themeToggleBtn = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeText = document.getElementById('themeText');
+      const htmlEl = document.documentElement;
+
+      function toggleTheme() {
+        const currentTheme = htmlEl.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        htmlEl.setAttribute('data-bs-theme', newTheme);
+        
+        if (themeIcon && themeText) {
+          if (newTheme === 'dark') {
+            themeIcon.setAttribute('data-lucide', 'sun');
+            themeText.textContent = 'Modo Claro';
+          } else {
+            themeIcon.setAttribute('data-lucide', 'moon');
+            themeText.textContent = 'Modo Oscuro';
+          }
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+
+      themeToggleBtn?.addEventListener('click', toggleTheme);
+
+      // 2. Botón Copiar Código (Solo Ícono)
+      document.querySelectorAll('.code-block-wrapper').forEach(wrapper => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-copy-code';
+        btn.setAttribute('aria-label', 'Copiar código al portapapeles');
+        btn.setAttribute('title', 'Copiar código');
+        btn.innerHTML = '<i data-lucide="copy" class="icon-sm"></i>';
+        
+        btn.addEventListener('click', async () => {
+          const codeText = wrapper.querySelector('code')?.innerText || '';
+          try {
+            await navigator.clipboard.writeText(codeText);
+            btn.innerHTML = '<i data-lucide="check" class="icon-sm text-success"></i>';
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => {
+              btn.innerHTML = '<i data-lucide="copy" class="icon-sm"></i>';
+              if (window.lucide) lucide.createIcons();
+            }, 2000);
+          } catch (err) {
+            console.error('Error al copiar: ', err);
+          }
+        });
+        
+        wrapper.appendChild(btn);
+      });
+      if (window.lucide) lucide.createIcons();
+
+      // 3. Playground Interactivo + Blur Automático
+      let playgroundInstance = null;
+
+      function updatePlayground() {
+        if (playgroundInstance) {
+          playgroundInstance.destroy();
+        }
+
+        const decimals = parseInt(document.getElementById('playDecimals').value, 10) || 0;
+        const separator = document.getElementById('playSeparator').value;
+        const negative = document.getElementById('playNegative').checked;
+        const parse = document.getElementById('playParse').checked;
+        const selectize = document.getElementById('playSelectize').checked;
+
+        // Actualizar vistas previas de código
+        const jsPreview = document.getElementById('previewJsCode');
+        const htmlPreview = document.getElementById('previewHtmlCode');
+
+        if (jsPreview) {
+          jsPreview.textContent = `new PgNumber('#miInput', {\n  decimals: ${decimals},\n  separator: '${separator}',\n  negative: ${negative},\n  parse: ${parse},\n  selectize: ${selectize}\n});`;
+        }
+
+        if (htmlPreview) {
+          htmlPreview.textContent = `<input type="text"\n  data-pgnumber-decimals="${decimals}"\n  data-pgnumber-separator="${separator}"\n  data-pgnumber-negative="${negative}"\n  data-pgnumber-parse="${parse}"\n  data-pgnumber-selectize="${selectize}" />`;
+        }
+
+        if (window.Prism) {
+          Prism.highlightAll();
+        }
+
+        // Re-inicializar instancia si la librería está disponible
+        const inputEl = document.getElementById('playgroundInput');
+        if (window.PgNumber && inputEl) {
+          playgroundInstance = new PgNumber('#playgroundInput', {
+            decimals,
+            separator,
+            negative,
+            parse,
+            selectize
+          });
+
+          // Disparar blur automáticamente para reflejar cambios
+          inputEl.blur();
+        }
+      }
+
+      document.querySelectorAll('.play-control').forEach(control => {
+        control.addEventListener('input', updatePlayground);
+        control.addEventListener('change', updatePlayground);
+      });
+
+      updatePlayground();
+
+      // 4. Inicialización de Ejemplos
+      if (window.PgNumber) {
+        new PgNumber('.demo-data-attr');
+
+        new PgNumber('#containerDinamico', {
+          selector: '.input-dinamico',
+          decimals: 2,
+          separator: '.'
+        });
+      }
+
+      const btnAgregarCampo = document.getElementById('btnAgregarCampo');
+      const containerDinamico = document.getElementById('containerDinamico');
+      let itemCounter = 1;
+
+      btnAgregarCampo?.addEventListener('click', () => {
+        itemCounter++;
+        const div = document.createElement('div');
+        div.className = 'input-group mb-2';
+        div.innerHTML = `
+          <input type="text" class="form-control input-dinamico" aria-label="Precio item ${itemCounter}" placeholder="Precio item ${itemCounter}">
+          <button class="btn btn-outline-danger btn-remove" type="button" onclick="this.parentElement.remove()">Eliminar</button>
+        `;
+        containerDinamico.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
